@@ -4,7 +4,6 @@ services:
   web:
     build: .
     container_name: test_deploy_web
-    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./app:/app/
       - staticfiles:/app/static/
@@ -23,7 +22,7 @@ services:
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=hello
+      - POSTGRES_PASSWORD=hello      
 
   nginx:
     build: ./nginx
