@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...) // in our case /app/app
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'view.apps.ViewConfig',
+    "user",
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +83,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
-        'USER': 'postgres',
+        'USER': 'postgresuser',
         'PASSWORD': 'hello',
         'HOST': 'db',
         'PORT': '5432',
@@ -124,7 +127,19 @@ USE_TZ = True
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# is a setting that specifies the directory where the collectstatic
+# command will gather all your static files during deployment.
 STATIC_URL = '/static/'
+#  base URL that will be used to serve static files in web appl.
+# When referencing a static file in templates (e.g., <link rel="stylesheet" href="{% static 'css/style.css' %}">),
+# Django will prepend the STATIC_URL to the file path to construct the complete URL for accessing the static file.
+# static files -> http://example.com/static/css/style.css.
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles'),
 ]
+# specify additional directories from which Django should collect static files
+# during the collectstatic process.
+
+# Media files (uploaded by users)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

@@ -4,7 +4,8 @@ services:
   web:
     build: .
     container_name: test_deploy_web
-    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && gunicorn app.wsgi:application --bind 0.0.0.0:8000"
+    #command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./app:/app/
       - staticfiles:/app/static/
@@ -14,7 +15,9 @@ services:
       - ./.env
     depends_on:
       - db
-
+#missing the migration, how the tables in db are built??
+# command: bash -c "python manage.py migrate && gunicorn app.wsgi:application --bind 0.0.0.0:8000"
+ 
   db:
     image: postgres
     container_name: test_deploy_db
@@ -22,7 +25,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=postgresuser
       - POSTGRES_PASSWORD=hello
 
   nginx:

@@ -16,7 +16,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username')
+        fields = ('email', 'display_name')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -40,12 +40,12 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
-    password = ReadOnlyPasswordHashField()
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'username', 'is_active', 'is_admin')
-
+        fields = ('email', 'display_name', 'is_active', 'is_admin')
+        
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
@@ -61,10 +61,10 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'username', 'is_active', 'is_admin', 'created_at',)
+    list_display = ('email', 'display_name', 'is_active', 'is_admin', 'created_at',)
     list_filter = ('is_admin', )
     fieldsets = (
-        (None, {'fields': ('email', 'username', 'password')}),
+        (None, {'fields': ('email', 'display_name', 'password')}),
         ('Permissions', {'fields': ('is_active', 'is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -72,11 +72,11 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2'),
+            'fields': ('email', 'display_name', 'password1', 'password2'),
         }),
     )
-    search_fields = ('email', 'username', )
-    ordering = ('email', 'username', )
+    search_fields = ('email', 'display_name', )
+    ordering = ('email', 'display_name', )
     filter_horizontal = ()
 
 
@@ -84,4 +84,4 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(User, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
-admin.site.unregister(Group)
+#admin.site.unregister(Group)
